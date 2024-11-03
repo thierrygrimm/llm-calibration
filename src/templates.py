@@ -1,6 +1,7 @@
 from typing import Literal
 from pydantic import BaseModel, Field, confloat
 
+
 #########################################################################################################################
 # 4 Choices
 #########################################################################################################################
@@ -18,6 +19,7 @@ class Response4Uppercase(BaseModel):
     confidence: confloat(strict=True, ge=0.0, le=1.0) = Field(
         description="The confidence in the prediction as a float where 0.0 equals no confidence and 1.0 equals total confidence.",
     )
+
 
 # 1.2
 class Response4Lowercase(BaseModel):
@@ -102,6 +104,7 @@ class ResponseRelativeConfidence4Lowercase(BaseModel):
         description="The probability of d being correct as a float where 0.0 equals no confidence and 1.0 equals total confidence.",
     )
 
+
 # 2.3
 class ResponseRelativeConfidence4Numeric(BaseModel):
     thought: str = Field(
@@ -147,6 +150,7 @@ class Response5Uppercase(BaseModel):
         description="The confidence in the prediction as a float where 0.0 equals no confidence and 1.0 equals total confidence.",
     )
 
+
 # 3.2
 class Response5Lowercase(BaseModel):
     thought: str = Field(
@@ -161,6 +165,7 @@ class Response5Lowercase(BaseModel):
         description="The confidence in the prediction as a float where 0.0 equals no confidence and 1.0 equals total confidence.",
     )
 
+
 # 3.3
 class Response5Numeric(BaseModel):
     thought: str = Field(
@@ -174,6 +179,7 @@ class Response5Numeric(BaseModel):
     confidence: confloat(strict=True, ge=0.0, le=1.0) = Field(
         description="The confidence in the prediction as a float where 0.0 equals no confidence and 1.0 equals total confidence.",
     )
+
 
 # 4.1
 class ResponseRelativeConfidence5Uppercase(BaseModel):
@@ -236,6 +242,7 @@ class ResponseRelativeConfidence5Lowercase(BaseModel):
         description="The probability of e being correct as a float where 0.0 equals no confidence and 1.0 equals total confidence.",
     )
 
+
 # 4.3
 class ResponseRelativeConfidence5Numeric(BaseModel):
     thought: str = Field(
@@ -265,3 +272,36 @@ class ResponseRelativeConfidence5Numeric(BaseModel):
     conf_e: confloat(strict=True, ge=0.0, le=1.0) = Field(
         description="The probability of 5 being correct as a float where 0.0 equals no confidence and 1.0 equals total confidence.",
     )
+
+
+def get_template(number: int, confidence_type: str, encoding_type: str = "uppercase"):
+    if number == 4:
+        if confidence_type == "relative":
+            if encoding_type == "uppercase":
+                return ResponseRelativeConfidence4Uppercase
+            elif encoding_type == "lowercase":
+                return ResponseRelativeConfidence4Lowercase
+            elif encoding_type == "numeric":
+                return ResponseRelativeConfidence4Numeric
+        else:
+            if encoding_type == "uppercase":
+                return Response4Uppercase
+            elif encoding_type == "lowercase":
+                return Response4Lowercase
+            elif encoding_type == "numeric":
+                return Response4Numeric
+    elif number == 5:
+        if confidence_type == "relative":
+            if encoding_type == "uppercase":
+                return ResponseRelativeConfidence5Uppercase
+            elif encoding_type == "lowercase":
+                return ResponseRelativeConfidence5Lowercase
+            elif encoding_type == "numeric":
+                return ResponseRelativeConfidence5Numeric
+        else:
+            if encoding_type == "uppercase":
+                return Response5Uppercase
+            elif encoding_type == "lowercase":
+                return Response5Lowercase
+            elif encoding_type == "numeric":
+                return Response5Numeric
