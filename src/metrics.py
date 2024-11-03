@@ -1,3 +1,11 @@
+"""
+Description:
+Functions for formatting and constructing prompts for answering questions.
+
+Functions:
+- expected_calibration_error: Calculates the Expected Calibration Error (ECE) for a model's predictions.
+- plot_calibration_with_density: Plots a calibration curve with ECE and a density plot of predicted probabilities.
+"""
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns

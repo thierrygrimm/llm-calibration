@@ -1,3 +1,15 @@
+"""
+Description:
+Functions for formatting and constructing prompts for answering questions.
+
+Functions:
+- format_choices: Formats a list of choices into a string with each choice prefixed by specified style.
+- get_example_format: Determines the answer format example based on format_style.
+- format_prompt: Formats a prompt with specified style.
+- construct_prompt: Constructs a prompt for answering a question based on provided context and choices.
+"""
+
+
 def format_choices(choices, format_style="uppercase", separator="\n"):
     """
     Format a list of choices into a string with each choice prefixed by specified style.
@@ -21,17 +33,11 @@ def format_choices(choices, format_style="uppercase", separator="\n"):
         raise ValueError("format_style must be 'uppercase', 'lowercase', or 'numeric'.")
 
     if format_style == "numeric":
-        choices_text = separator.join(
-            [f"{i + 1}. {choice}" for i, choice in enumerate(choices)]
-        )
+        choices_text = separator.join([f"{i + 1}. {choice}" for i, choice in enumerate(choices)])
     elif format_style == "lowercase":
-        choices_text = separator.join(
-            [f"{chr(97 + i)}) {choice}" for i, choice in enumerate(choices)]
-        )
+        choices_text = separator.join([f"{chr(97 + i)}) {choice}" for i, choice in enumerate(choices)])
     else:  # Default to uppercase letters
-        choices_text = separator.join(
-            [f"{chr(65 + i)}. {choice}" for i, choice in enumerate(choices)]
-        )
+        choices_text = separator.join([f"{chr(65 + i)}. {choice}" for i, choice in enumerate(choices)])
 
     return choices_text
 
@@ -85,8 +91,7 @@ def format_prompt(context, question, choices_text, mode="1-hop", confidence_type
 
     confidence_prompt = {
         "relative": f"""Then provide the likelihood that each answer out of ({example_format}) is correct.\nGive ONLY the probabilities between 0 and 1 for each option, no other words or explanation.""",
-        "absolute": f"""Then choose the best answer by returning one letter ({example_format}) corresponding to the correct choice.\nFinally, please provide your confidence that your guess is correct. Give ONLY the probability between 0 and 1, no other words or explanation."""
-    }
+        "absolute": f"""Then choose the best answer by returning one letter ({example_format}) corresponding to the correct choice.\nFinally, please provide your confidence that your guess is correct. Give ONLY the probability between 0 and 1, no other words or explanation."""}
 
     # Construct final prompt
     prompt = f"""{context_part}{base_prompt}{confidence_prompt[confidence_type]}""".strip()
