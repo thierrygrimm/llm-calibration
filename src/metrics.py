@@ -31,9 +31,6 @@ def expected_calibration_error(probabilities, labels, num_bins=10):
             avg_confidence = np.mean(probabilities[in_bin])
             avg_accuracy = np.mean(labels[in_bin])
 
-            print(f"There are {np.sum(in_bin)} samples in the bin {bin_lower} to {bin_upper}")
-            print(f"Average confidence: {avg_confidence}")
-
             # Accumulate the weighted difference between accuracy and confidence
             ece += np.abs(avg_confidence - avg_accuracy) * prop_in_bin
 
@@ -104,24 +101,26 @@ def plot_calibration_with_density(predicted_probs, true_labels, num_bins=5):
     plt.show()
 
 
-# Generate synthetic data
-np.random.seed(0)
-num_samples = 1000
+# Execute if this script is called directly
+if __name__ == "__main__":
+    # Generate synthetic data
+    np.random.seed(0)
+    num_samples = 1000
 
-# Generate true labels
-true_labels = np.random.randint(0, 2, size=num_samples)  # Random binary labels
+    # Generate true labels
+    true_labels = np.random.randint(0, 2, size=num_samples)  # Random binary labels
 
-# Generate predicted probabilities with noise
-predicted_probs = np.zeros(num_samples)
+    # Generate predicted probabilities with noise
+    predicted_probs = np.zeros(num_samples)
 
-# Assign predicted probabilities with a mix of random data
-for i in range(num_samples):
-    if true_labels[i] == 1:
-        # Predicted probabilities for positive class with some noise
-        predicted_probs[i] = np.clip(np.random.normal(loc=0.7, scale=0.3), 0, 1)
-    else:
-        # Predicted probabilities for negative class with some noise
-        predicted_probs[i] = np.clip(np.random.normal(loc=0.3, scale=0.15), 0, 1)
+    # Assign predicted probabilities with a mix of random data
+    for i in range(num_samples):
+        if true_labels[i] == 1:
+            # Predicted probabilities for positive class with some noise
+            predicted_probs[i] = np.clip(np.random.normal(loc=0.7, scale=0.3), 0, 1)
+        else:
+            # Predicted probabilities for negative class with some noise
+            predicted_probs[i] = np.clip(np.random.normal(loc=0.3, scale=0.15), 0, 1)
 
-# Call the function to plot
-plot_calibration_with_density(predicted_probs, true_labels, num_bins=10)
+    # Call the function to plot
+    plot_calibration_with_density(predicted_probs, true_labels, num_bins=10)
