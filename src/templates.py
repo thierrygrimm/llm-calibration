@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field, confloat
 # 1.1
 class Response4Uppercase(BaseModel):
     thought: str = Field(
-        description="A long-form description of chain-of-thought reasoning.",
+        description="First, think carefully and describe your thought process step-by-step. Explain the reasoning behind each decision. Then, provide a summary of your final answer.",
     )
 
     answer: Literal["A", "B", "C", "D"] = Field(
@@ -22,7 +22,7 @@ class Response4Uppercase(BaseModel):
 # 1.2
 class Response4Lowercase(BaseModel):
     thought: str = Field(
-        description="A long-form description of chain-of-thought reasoning.",
+        description="First, think carefully and describe your thought process step-by-step. Explain the reasoning behind each decision. Then, provide a summary of your final answer.",
     )
 
     answer: Literal["a", "b", "c", "d"] = Field(
@@ -37,7 +37,7 @@ class Response4Lowercase(BaseModel):
 # 1.3
 class Response4Numeric(BaseModel):
     thought: str = Field(
-        description="A long-form description of chain-of-thought reasoning.",
+        description="First, think carefully and describe your thought process step-by-step. Explain the reasoning behind each decision. Then, provide a summary of your final answer.",
     )
 
     answer: Literal["1", "2", "3", "4"] = Field(
@@ -52,7 +52,7 @@ class Response4Numeric(BaseModel):
 # 2.1
 class ResponseRelativeConfidence4Uppercase(BaseModel):
     thought: str = Field(
-        description="A long-form description of chain-of-thought reasoning.",
+        description="First, think carefully and describe your thought process step-by-step. Explain the reasoning behind each decision. Then, provide a summary of your final answer.",
     )
 
     answer: Literal["A", "B", "C", "D"] = Field(
@@ -79,7 +79,7 @@ class ResponseRelativeConfidence4Uppercase(BaseModel):
 # 2.2
 class ResponseRelativeConfidence4Lowercase(BaseModel):
     thought: str = Field(
-        description="A long-form description of chain-of-thought reasoning.",
+        description="First, think carefully and describe your thought process step-by-step. Explain the reasoning behind each decision. Then, provide a summary of your final answer.",
     )
 
     answer: Literal["a", "b", "c", "d"] = Field(
@@ -105,7 +105,7 @@ class ResponseRelativeConfidence4Lowercase(BaseModel):
 # 2.3
 class ResponseRelativeConfidence4Numeric(BaseModel):
     thought: str = Field(
-        description="A long-form description of chain-of-thought reasoning.",
+        description="First, think carefully and describe your thought process step-by-step. Explain the reasoning behind each decision. Then, provide a summary of your final answer.",
     )
 
     answer: Literal["1", "2", "3", "4"] = Field(
@@ -136,7 +136,7 @@ class ResponseRelativeConfidence4Numeric(BaseModel):
 # 3.1
 class Response5Uppercase(BaseModel):
     thought: str = Field(
-        description="A long-form description of chain-of-thought reasoning.",
+        description="First, think carefully and describe your thought process step-by-step. Explain the reasoning behind each decision. Then, provide a summary of your final answer.",
     )
 
     answer: Literal["A", "B", "C", "D", "E"] = Field(
@@ -150,7 +150,7 @@ class Response5Uppercase(BaseModel):
 # 3.2
 class Response5Lowercase(BaseModel):
     thought: str = Field(
-        description="A long-form description of chain-of-thought reasoning.",
+        description="First, think carefully and describe your thought process step-by-step. Explain the reasoning behind each decision. Then, provide a summary of your final answer.",
     )
 
     answer: Literal["a", "b", "c", "d", "e"] = Field(
@@ -164,7 +164,7 @@ class Response5Lowercase(BaseModel):
 # 3.3
 class Response5Numeric(BaseModel):
     thought: str = Field(
-        description="A long-form description of chain-of-thought reasoning.",
+        description="First, think carefully and describe your thought process step-by-step. Explain the reasoning behind each decision. Then, provide a summary of your final answer.",
     )
 
     answer: Literal["1", "2", "3", "4", "5"] = Field(
@@ -178,7 +178,7 @@ class Response5Numeric(BaseModel):
 # 4.1
 class ResponseRelativeConfidence5Uppercase(BaseModel):
     thought: str = Field(
-        description="A long-form description of chain-of-thought reasoning.",
+        description="First, think carefully and describe your thought process step-by-step. Explain the reasoning behind each decision. Then, provide a summary of your final answer.",
     )
 
     answer: Literal["A", "B", "C", "D", "E"] = Field(
@@ -209,7 +209,7 @@ class ResponseRelativeConfidence5Uppercase(BaseModel):
 # 4.2
 class ResponseRelativeConfidence5Lowercase(BaseModel):
     thought: str = Field(
-        description="A long-form description of chain-of-thought reasoning.",
+        description="First, think carefully and describe your thought process step-by-step. Explain the reasoning behind each decision. Then, provide a summary of your final answer.",
     )
 
     answer: Literal["a", "b", "c", "d", "e"] = Field(
@@ -239,7 +239,7 @@ class ResponseRelativeConfidence5Lowercase(BaseModel):
 # 4.3
 class ResponseRelativeConfidence5Numeric(BaseModel):
     thought: str = Field(
-        description="A long-form description of chain-of-thought reasoning.",
+        description="First, think carefully and describe your thought process step-by-step. Explain the reasoning behind each decision. Then, provide a summary of your final answer.",
     )
 
     answer: Literal["1", "2", "3", "4", "5"] = Field(
