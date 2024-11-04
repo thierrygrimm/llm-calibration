@@ -10,7 +10,7 @@ from pydantic import (
 )
 from tqdm import tqdm
 
-from src.metrics import plot_calibration_with_density
+from metrics import plot_calibration_with_density
 
 current_directory = os.getcwd()  # Get the current working directory
 src_path = os.path.join(current_directory, "../")  # Navigate to the src folder
