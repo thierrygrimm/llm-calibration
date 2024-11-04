@@ -112,6 +112,8 @@ if __name__ == "__main__":
     # Preprocess data: remove options with more than 5 choices
     train_df["options"] = train_df["options"].apply(ast.literal_eval)
     train_df = train_df[train_df["options"].apply(len) <= 5].reset_index()
+    # Convert context to string to avoid AttributeError
+    train_df['context'] = train_df['context'].astype(str)
 
     # Limit the number of rows to process
     if args.limit > 0:
@@ -133,7 +135,7 @@ if __name__ == "__main__":
     output_df["confidence"] = confidences
 
     # Map predictions to indices and calculate is_correct column
-    output_df["is_correct"] = output_df["prediction"].map(ANSWER_MAP) == output_df["correct_answer"] * 1
+    output_df["is_correct"] = (output_df["prediction"].map(ANSWER_MAP) == output_df["correct_answer"]).astype(int)
 
     # Save to CSV
     output_df.to_csv(output_filename, index=False)
