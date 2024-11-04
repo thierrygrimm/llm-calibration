@@ -76,13 +76,14 @@ def infer(context, question, options, client, model="llama3.1:8b", confidence_ty
                     "content": f"{prompt}",
                 }
             ],
-            max_retries=10,
+            max_retries=20,
             response_model=get_template(len(options), confidence_type, encoding_type),
             temperature=0,
         )
         response = resp.model_dump()
 
     except (ValidationError, InstructorRetryException) as exc:
+        print("Caught exception when trying to infer answer: ", exc)
         response = {
             "answer": "NaN",
             "conf_a": np.nan,
