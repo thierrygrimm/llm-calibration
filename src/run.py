@@ -10,8 +10,6 @@ from pydantic import (
 )
 from tqdm import tqdm
 
-from metrics import plot_calibration_with_density
-
 current_directory = os.getcwd()  # Get the current working directory
 src_path = os.path.join(current_directory, "../")  # Navigate to the src folder
 sys.path.insert(0, src_path)
@@ -144,6 +142,3 @@ if __name__ == "__main__":
     print(f"Average confidence: {output_df['confidence'].mean() * 100:.2f}%")
     print(f"Accuracy: {output_df['is_correct'].mean() * 100:.2f}%")
     print("Done!")
-
-    # Plot calibration
-    # plot_calibration_with_density(output_df["confidence"], output_df["is_correct"], 15)
