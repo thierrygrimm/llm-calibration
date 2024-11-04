@@ -85,9 +85,9 @@ def plot_calibration_with_density(predicted_probs, true_labels, num_bins=5):
     ax1.plot(used_bin_centers, prob_true, marker='o', label='True Probability', color='blue')
 
     # Fill areas above and below the diagonal line
-    ax1.fill_between(used_bin_centers, prob_true, used_bin_centers, where=(prob_true > used_bin_centers),
+    ax1.fill_between(used_bin_centers, prob_true, used_bin_centers, where=(prob_true < used_bin_centers),
                      interpolate=True, color='lightcoral', alpha=0.4, label='Overconfident')  # Light Red
-    ax1.fill_between(used_bin_centers, prob_true, used_bin_centers, where=(prob_true <= used_bin_centers),
+    ax1.fill_between(used_bin_centers, prob_true, used_bin_centers, where=(prob_true > used_bin_centers),
                      interpolate=True, color='lightblue', alpha=0.4, label='Underconfident')  # Light Blue
 
     # Plot diagonal line
