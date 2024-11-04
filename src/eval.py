@@ -47,6 +47,9 @@ def relative_confidence(confidence_list, given_answer):
     """
     total_confidence = sum(confidence_list)
     answer_map = {"A": 0, "B": 1, "C": 2, "D": 3, "E": 4}
+
+    if total_confidence == 0:
+        return np.nan
     return confidence_list[answer_map.get(given_answer)] / total_confidence
 
 
