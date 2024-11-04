@@ -61,37 +61,38 @@ def plot_calibration_with_density(predicted_probs, true_labels, num_bins=5):
     bins = np.linspace(0, 1, num_bins + 1)
     bin_indices = np.digitize(predicted_probs, bins) - 1
 
-    # Calculate true probabilities and predicted probabilities for each bin
+    # Calculate true probabilities and predicted probabilities for each non-empty bin
     bin_centers = 0.5 * (bins[:-1] + bins[1:])
     prob_true = []
     prob_pred = []
+    used_bin_centers = []  # To store only non-empty bin centers
 
     for i in range(num_bins):
         in_bin = (bin_indices == i)
-        if np.any(in_bin):
+        if np.any(in_bin):  # Only process non-empty bins
             prob_true.append(true_labels[in_bin].mean())
             prob_pred.append(predicted_probs[in_bin].mean())
-        else:
-            prob_true.append(0)
-            prob_pred.append(0)
+            used_bin_centers.append(bin_centers[i])
 
     prob_true = np.array(prob_true)
     prob_pred = np.array(prob_pred)
+    used_bin_centers = np.array(used_bin_centers)
 
     # Create figure and subplots
     fig, (ax1, ax2) = plt.subplots(2, 1, gridspec_kw={'height_ratios': [3, 1]}, figsize=(8, 8), sharex=True)
 
     # Plot calibration curve
-    ax1.plot(bin_centers, prob_true, marker='o', label='True Probability', color='blue')
+    ax1.plot(used_bin_centers, prob_true, marker='o', label='True Probability', color='blue')
 
-    # Fill areas above and below the diagonal with lighter colors
-    ax1.fill_between(bin_centers, prob_pred, prob_true, where=(prob_pred > prob_true),
-                     interpolate=True, color='lightcoral', alpha=0.3, label='Overestimated')  # Light Red
-    ax1.fill_between(bin_centers, prob_pred, prob_true, where=(prob_pred <= prob_true),
-                     interpolate=True, color='lightblue', alpha=0.3, label='Underestimated')  # Light Blue
+    # Fill areas above and below the diagonal line
+    ax1.fill_between(used_bin_centers, prob_true, used_bin_centers, where=(prob_true > used_bin_centers),
+                     interpolate=True, color='lightcoral', alpha=0.4, label='Overconfident')  # Light Red
+    ax1.fill_between(used_bin_centers, prob_true, used_bin_centers, where=(prob_true <= used_bin_centers),
+                     interpolate=True, color='lightblue', alpha=0.4, label='Underconfident')  # Light Blue
 
+    # Plot diagonal line
     ax1.plot([0, 1], [0, 1], linestyle='--', color='gray', label='Perfectly Calibrated')  # Diagonal line
-    ax1.set_title("Calibration Curve with ECE")
+    ax1.set_title(f"Calibration Curve with ECE: {ece:.3f}")
     ax1.legend(loc="upper left")
     ax1.set_ylabel("Probability")
     ax1.set_ylim(-0.05, 1.05)  # Adjust y limits for better visibility
