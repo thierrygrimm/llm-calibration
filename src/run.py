@@ -75,7 +75,7 @@ def pred_and_conf(row, client, model="llama3.1:8b", confidence_type="absolute", 
 if __name__ == "__main__":
     # Parse command-line arguments
     parser = argparse.ArgumentParser(description="Run predictions with confidence calculation.")
-    parser.add_argument("--data_path", type=str, default="../data/train_df.csv", help="Path to the CSV data file.")
+    parser.add_argument("--data_path", type=str, default="../data/subset1000.csv", help="Path to the CSV data file.")
     parser.add_argument("--confidence_type", type=str, choices=["absolute", "relative"], default="absolute",
                         help="Type of confidence calculation to use.")
     parser.add_argument("--model", type=str, default="llama3.1:8b", help="Model name to use for predictions.")
