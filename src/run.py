@@ -2,13 +2,19 @@ import argparse
 import ast
 import os
 import sys
-
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import openai
 import numpy as np
 import pandas as pd
+from anthropic import Anthropic
 from pydantic import (
     ValidationError,
 )
 from tqdm import tqdm
+from dotenv import load_dotenv
+
+# API key from .env
+load_dotenv()
 
 current_directory = os.getcwd()  # Get the current working directory
 src_path = os.path.join(current_directory, "../")  # Navigate to the src folder
@@ -80,12 +86,13 @@ if __name__ == "__main__":
                         help="Type of confidence calculation to use.")
     parser.add_argument("--model", type=str, default="llama3.1:8b", help="Model name to use for predictions.")
     parser.add_argument("--limit", type=int, default=0, help="Number of rows to process (0 for all rows).")
+    parser.add_argument("--num_threads", type=int, default=15, help="Number of threads to use for processing.")
 
     args = parser.parse_args()
 
     # Set the mode based on the model name
-    mode = "gpt-4o" if args.model == "gpt-4o" else "ollama"
-    if mode not in ["gpt-4o", "ollama"]:
+    mode = "gpt-4o" if args.model in ["gpt-4o", "gpt-4o-mini"] else "fireworks"
+    if mode not in ["gpt-4o", "ollama", "litellm", "fireworks", "claude"]:
         raise ValueError(f"Unsupported mode '{mode}'. Only 'gpt-4o' and 'ollama' are supported.")
 
     if mode == "ollama":
@@ -97,9 +104,23 @@ if __name__ == "__main__":
             ),
             mode=instructor.Mode.JSON,
         )
-    else:
-        openai_key = os.getenv("OLLAMA_API_KEY")
+    elif mode == "gpt-4o":
+        openai_key = os.getenv("OPENAI_API_KEY")
         client = instructor.from_openai(OpenAI(api_key=openai_key))
+    elif mode == "litellm":
+        # litellm
+        client = instructor.from_openai(OpenAI(api_key="anything",base_url="http://0.0.0.0:4000"))
+    elif mode == "fireworks":
+        fireworks_api_key = os.getenv("FIREWORKS_API_KEY")
+        client = instructor.from_openai(
+            OpenAI(
+                base_url="https://api.fireworks.ai/inference/v1",
+                api_key=fireworks_api_key,
+            ),
+        mode = instructor.Mode.JSON,
+        )
+    else:
+        client = instructor.from_anthropic(Anthropic())
 
     predictions = []
     confidences = []
@@ -117,13 +138,27 @@ if __name__ == "__main__":
     if args.limit > 0:
         train_df = train_df.head(args.limit)
 
-    # Use tqdm to show progress
-    for index, row in tqdm(
-            train_df.iterrows(), total=train_df.shape[0], desc="Processing rows"
-    ):
-        pred, conf = pred_and_conf(row, client, confidence_type=args.confidence_type, model=args.model)
-        predictions.append(pred)
-        confidences.append(conf)
+    predictions = [None] * len(train_df)  # Initialize list to preserve order
+    confidences = [None] * len(train_df)  # Initialize list to preserve order
+
+    # Use ThreadPoolExecutor for multi-threading
+    with ThreadPoolExecutor(max_workers=args.num_threads) as executor:
+        futures = {
+            executor.submit(pred_and_conf, row, client, args.model, args.confidence_type): index
+            for index, row in train_df.iterrows()
+        }
+
+        # Use tqdm to show progress
+        for future in tqdm(as_completed(futures), total=len(futures), desc="Processing rows"):
+            index = futures[future]
+            try:
+                pred, conf = future.result()
+                predictions[index] = pred  # Place result at the correct index
+                confidences[index] = conf  # Place result at the correct index
+            except Exception as e:
+                print(f"Error processing row {index}: {e}")
+                predictions[index] = None  # Handle the error appropriately
+                confidences[index] = None  # Handle the error appropriately
 
     # Save predictions and confidences to a CSV file
     os.makedirs("../results", exist_ok=True)
@@ -134,6 +169,7 @@ if __name__ == "__main__":
     output_df = train_df.copy()
     output_df["prediction"] = predictions
     output_df["confidence"] = confidences
+
 
     # Map predictions to indices and calculate is_correct column
     output_df["is_correct"] = (output_df["prediction"].map(ANSWER_MAP) == output_df["correct_answer"]).astype(int)
