@@ -127,7 +127,10 @@ if __name__ == "__main__":
 
     # Save predictions and confidences to a CSV file
     os.makedirs("../results", exist_ok=True)
-    output_filename = f"../results/predictions_{args.model}_{args.confidence_type}_confidence.csv"
+
+    # Sanitize model name by replacing slashes with underscores and save to CSV
+    safe_model_name = args.model.replace("/", "_")
+    output_filename = f"../results/predictions_{safe_model_name}_{args.confidence_type}_confidence.csv"
     output_df = train_df.copy()
     output_df["prediction"] = predictions
     output_df["confidence"] = confidences
