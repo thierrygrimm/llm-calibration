@@ -79,8 +79,9 @@ def infer(context, question, options, client, model="llama3.1:8b", confidence_ty
                     "content": f"{prompt}",
                 }
             ],
-            max_retries=20,
+            max_retries=5,
             response_model=get_template(len(options), confidence_type, encoding_type),
+            max_tokens=1024,
             temperature=0,
         )
         response = resp.model_dump()
