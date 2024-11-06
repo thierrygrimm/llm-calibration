@@ -1,0 +1,41 @@
+,Model,Confidence Type,Dataset,ECE,Brier Score,F1 Score
+0,Llama 3.1: 8B Instruct,relative,commonsense_qa,0.078,0.241,0.844
+1,Llama 3.1: 8B Instruct,relative,logiqa,0.117,0.382,0.632
+2,Llama 3.1: 8B Instruct,relative,mathqa,0.093,0.291,0.799
+3,Llama 3.1: 8B Instruct,relative,quail,0.117,0.249,0.807
+4,Llama 3.1: 70B Instruct,absolute,commonsense_qa,0.256,0.342,0.752
+5,Llama 3.1: 70B Instruct,absolute,logiqa,0.293,0.368,0.662
+6,Llama 3.1: 70B Instruct,absolute,mathqa,0.343,0.387,0.558
+7,Llama 3.1: 70B Instruct,absolute,quail,0.232,0.299,0.788
+8,Claude 3.5 Haiku,absolute,commonsense_qa,0.131,0.187,0.864
+9,Claude 3.5 Haiku,absolute,logiqa,0.288,0.319,0.74
+10,Claude 3.5 Haiku,absolute,mathqa,0.115,0.152,0.898
+11,Claude 3.5 Haiku,absolute,quail,0.105,0.159,0.885
+12,Llama 3.2: 3B Instruct,absolute,commonsense_qa,0.185,0.25,0.802
+13,Llama 3.2: 3B Instruct,absolute,logiqa,0.485,0.478,0.532
+14,Llama 3.2: 3B Instruct,absolute,mathqa,0.246,0.307,0.722
+15,Llama 3.2: 3B Instruct,absolute,quail,0.184,0.243,0.808
+16,GPT-4o-mini,relative,commonsense_qa,0.05,0.163,0.88
+17,GPT-4o-mini,relative,logiqa,0.137,0.309,0.703
+18,GPT-4o-mini,relative,mathqa,0.031,0.165,0.895
+19,GPT-4o-mini,relative,quail,0.05,0.195,0.867
+20,Llama 3.1: 70B Instruct,relative,commonsense_qa,0.012,0.178,0.893
+21,Llama 3.1: 70B Instruct,relative,logiqa,0.091,0.346,0.743
+22,Llama 3.1: 70B Instruct,relative,mathqa,0.027,0.342,0.769
+23,Llama 3.1: 70B Instruct,relative,quail,0.028,0.187,0.885
+24,Llama 3.1: 8B Instruct,absolute,commonsense_qa,0.201,0.251,0.833
+25,Llama 3.1: 8B Instruct,absolute,logiqa,0.347,0.421,0.67
+26,Llama 3.1: 8B Instruct,absolute,mathqa,0.161,0.245,0.84
+27,Llama 3.1: 8B Instruct,absolute,quail,0.113,0.193,0.866
+28,Llama 3.2: 3B Instruct,relative,commonsense_qa,0.248,0.34,0.545
+29,Llama 3.2: 3B Instruct,relative,logiqa,0.155,0.353,0.299
+30,Llama 3.2: 3B Instruct,relative,mathqa,0.238,0.371,0.524
+31,Llama 3.2: 3B Instruct,relative,quail,0.306,0.378,0.509
+32,GPT-4o-mini,absolute,commonsense_qa,0.11,0.168,0.886
+33,GPT-4o-mini,absolute,logiqa,0.341,0.359,0.711
+34,GPT-4o-mini,absolute,mathqa,0.112,0.144,0.902
+35,GPT-4o-mini,absolute,quail,0.121,0.176,0.88
+36,Claude 3.5 Haiku,relative,commonsense_qa,0.103,0.174,0.868
+37,Claude 3.5 Haiku,relative,logiqa,0.104,0.26,0.721
+38,Claude 3.5 Haiku,relative,mathqa,0.064,0.141,0.906
+39,Claude 3.5 Haiku,relative,quail,0.04,0.159,0.879
