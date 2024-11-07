@@ -55,6 +55,83 @@ def calculate_metrics_by_dataset(data, num_bins=10):
     return pd.DataFrame(metrics_by_ds, columns=["Dataset", "ECE", "Brier Score", "F1 Score"])
 
 
+def plot_temperature_vs_ece(temp_folder_path, num_bins=10):
+    """
+    Plot temperature against ECE for files in the temperature folder.
+    """
+    # Extract files in the folder
+    temp_files = [f for f in os.listdir(temp_folder_path) if f.endswith('.csv')]
+    if not temp_files:
+        print(f"No CSV files found in folder: {temp_folder_path}")
+        return
+
+    # Regex to extract temperature from filename
+    temp_pattern = re.compile(r"temp(\d+\.\d+)")  # Match digits with one decimal point
+
+    temperatures = []
+    eces = []
+    f1_scores = []
+
+    for temp_file in temp_files:
+        match = temp_pattern.search(temp_file)
+        if not match:
+            print(f"Skipping file without temperature in name: {temp_file}")
+            continue
+
+        # Extract temperature
+        try:
+            temperature = float(match.group(1))  # Convert captured group to float
+        except ValueError as e:
+            print(f"Error converting temperature to float in file {temp_file}: {e}")
+            continue
+
+        csv_path = os.path.join(temp_folder_path, temp_file)
+
+        # Read the file
+        data = pd.read_csv(csv_path)
+        data = data[data['confidence'].notna()]  # Remove rows with missing confidence
+
+        # Calculate ECE and F1 Score
+        ece = calculate_ece(data, num_bins=num_bins)
+        f1 = calculate_f1_score(data)
+
+        if ece is not None and f1 is not None:
+            temperatures.append(temperature)
+            eces.append(ece)
+            f1_scores.append(f1)
+
+    if not temperatures or not (eces and f1_scores):
+        print("No valid data to plot temperature vs. metrics.")
+        return
+
+    # Plot temperature vs. metrics
+    fig, ax1 = plt.subplots(figsize=(10, 6))
+
+    sns.set(style="whitegrid", context="talk")
+
+    # Plot ECE
+    color_ece = 'blue'
+    ax1.set_xlabel("Temperature")
+    ax1.set_ylabel("ECE", color=color_ece)
+    ax1.plot(temperatures, eces, marker="o", color=color_ece, label="ECE")
+    ax1.tick_params(axis='y', labelcolor=color_ece)
+    ax1.set_ylim(0, 0.3)  # Adjust as needed for your data range
+
+    # Create a second y-axis for F1 Score
+    ax2 = ax1.twinx()
+    color_f1 = 'orange'
+    ax2.set_ylabel("F1 Score", color=color_f1)
+    ax2.plot(temperatures, f1_scores, marker="s", color=color_f1, label="F1 Score")
+    ax2.tick_params(axis='y', labelcolor=color_f1)
+    ax2.set_ylim(0, 1.0)  # Adjust as needed for your data range
+
+    # Title and layout
+    fig.suptitle("Temperature vs. ECE and F1 Score", fontsize=14)
+    fig.tight_layout()  # Adjust layout to prevent overlap
+    plt.show()
+    fig.savefig("../images/temperature.png")
+
+
 def check_missing_values(data, model_name, calib_type):
     """
     Check for missing values in confidence and is_correct columns for a specific model.
@@ -144,7 +221,9 @@ def main(folder_path, num_bins=10):
         plt.xticks(rotation=45, ha='right')
         plt.legend(title="Calibration Type")
         plt.tight_layout()
+        plt.savefig("../images/missing.png")
         plt.show()
+
     else:
         print("All models have complete data; no missing values to plot.")
 
@@ -159,6 +238,7 @@ def main(folder_path, num_bins=10):
     plt.xlabel("Model")
     plt.title("ECE by Dataset for each Model")
     plt.tight_layout()
+    plt.savefig("../images/ECE.png")
     plt.show()
 
     ece_grouped = ece_table.groupby(["Calibration Type", "Model"], as_index=False).mean()
@@ -170,6 +250,7 @@ def main(folder_path, num_bins=10):
     plt.xticks(rotation=45, ha='right')
     plt.legend(title="Calibration Type")
     plt.tight_layout()
+    plt.savefig("../images/ECE_grouped.png")
     plt.show()
 
     # Aggregate metrics across all models
@@ -190,7 +271,10 @@ def main(folder_path, num_bins=10):
     plt.title("Average F1 Score by Dataset")
 
     plt.tight_layout()
+    plt.savefig("../images/Brier_F1.png")
     plt.show()
+
+    plot_temperature_vs_ece(os.path.join(folder_path, "temperature"), num_bins=num_bins)
 
 
 if __name__ == "__main__":
