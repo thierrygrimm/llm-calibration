@@ -83,8 +83,8 @@ def format_prompt(context, question, choices_text, mode="1-hop", confidence_type
     # Determine the answer format example based on format_style
     example_format = get_example_format(format_style)
 
-    # Check if context is provided
-    context_part = f"Context: {context}\n" if context.strip() else ""
+    # Check if context is provided and not NaN
+    context_part = f"Context: {context}\n" if context.strip() and context.strip().lower() != "nan" else ""
 
     # Base prompt components
     base_prompt = f"""Question: {question}\nOptions:\n{choices_text}\n\nFirst think about it and give a logical chain of thought.\n"""
